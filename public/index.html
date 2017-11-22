@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Pictionary</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        
+         
+        <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"  crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script> -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src = "https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.16/p5.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.16/addons/p5.dom.js"></script>    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.16/addons/p5.sound.js"></script>
+        <script src = "./js/main.js"></script>  
+        <script src = "./js/sketch.js"></script>  
+        <link rel="stylesheet" href="./css/main.css">
+        <style>
+           
+        </style>
+        
+
+    </head>
+    <body>
+         
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <div class = "container">
+            <div id="topRow" class = "row">
+                    <div class="col-md-6" id = "timer"></div>
+                    <div class="col-md-6" id = "guessWord"></div>
+            </div>
+            <div id="userFormArea" class = "row" >
+                <div class = "col-md-12">
+                    <form id="userForm">
+                        <div class = "form-group">
+                            <label style="display:block;text-align: center;font-size:2em;"><strong >Name?</strong></label>
+                            <input class = "form-control" id="username" maxlength="15"></input>
+                            <br/>
+                            <input type="submit" class = "btn btn-primary" id = "login" value="Enter" />
+                        </div>
+                    </form>
+                </div>
+            </div>               
+            <div class = 'row' id = 'messageArea'>
+                <div class = 'col-md-3      '>
+                    <div id="well-users" class = 'well'>
+                        <h3 style="display:block;text-align: center;">Online Users</h3>
+                        <ul class = "list-group" id="users"> </ul>
+                    </div>
+                </div>
+                <div class = "col-md-8">
+                    <div class = "chat" id="chat">
+                        
+                    </div>
+                    <div id="mainChatContainer"></div>   
+                    <form id="messageForm">
+                        <div class = "form-group">
+                            <!-- <label><strong>Enter Answer</strong></label> -->
+                            <textarea placeholder="Enter answer here ..." class = "form-control" id="message"></textarea>
+                            <br/>
+                            <input id = "submitAns" type="submit" class = "btn btn-primary" value="Submit" />
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        
+        <!-- Modal -->
+        <div id='myModal' class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Username Taken / Username too short</h4>
+            </div>
+            <div class="modal-body">
+                <p>Try Another Username.</p>
+                <p>Username should be 3 letters or more.</p>
+                 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+
+        </div>
+        </div>
+
+
+        <!-- Modal Category -->
+        <div id='myModalCategory' class="modal fade" role="dialog">
+                <div class="modal-dialog">
+        
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Choose a Category!</h4>
+                    </div>
+                    <div id = 'categoryModalBody' class="modal-body">
+                        <button id="buttonPerson" type="button" class="btn btn-default" >People and Characters</button>
+                        <button id="buttonAnimals" type="button" class="btn btn-default">Animals</button>
+                        <button id="buttonAnything" type="button" class="btn btn-default" >Anything</button>
+                        <p id="placeholder"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
+                    </div>
+                    </div>
+        
+                </div>
+                </div>
+
+        
+          
+        
+    </body>
+</html>
